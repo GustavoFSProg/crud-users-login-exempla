@@ -1,0 +1,30 @@
+{
+  "name": "Api_04_2021",
+  "version": "1.0.0",
+  "main": "index.ts",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^4.2.4"
+  },
+  "scripts": {
+    "dev": "tsnd src/index.ts",
+    "lint": "eslint src/**/*.ts",
+    "build": "sucrase ./src -d ./dist --transforms typescript,imports",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "@types/cors": "^2.8.10",
+    "@types/dotenv": "^8.2.0",
+    "@types/express": "^4.17.11",
+    "@types/jsonwebtoken": "^8.5.1",
+    "@types/md5": "^2.3.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "md5": "^2.3.0",
+    "mongoose": "^5.12.3",
+    "sucrase": "^3.17.1",
+    "ts-node-dev": "^1.1.6"
+  }
+}
