@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import userModelTest from '../models/userModel'
 import md5 from 'md5'
 import { generateToken } from '../utils'
+import sendgrid from '@sendgrid/mail'
 
 async function getAll(req: Request, res: Response) {
   try {
@@ -34,6 +35,20 @@ async function login(req: Request, res: Response) {
   }
 }
 
+async function send(req: Request) {
+  await sendgrid.setApiKey(process.env.SENDGRID_API_KEY as string & { asBytes: true })
+  const msg = {
+    to: req.body.email,
+    from: 'augustoprog40@gmail.com',
+    subject: 'Email institucional!',
+    text: 'Cadastro Node.js',
+    html:
+      `${'<strong>Olá '}${req.body.name}, ` + ` Obrigado por se cadastrar no nosso site!</strong>`,
+  }
+  sendgrid.send(msg)
+  return sendgrid
+}
+
 async function create(req: Request, res: Response) {
   try {
     await userModelTest.create({
@@ -42,6 +57,7 @@ async function create(req: Request, res: Response) {
       password: md5(req.body.password, process.env.SECRET as string & { asBytes: true }),
     })
 
+    send(req.body)
     const token = await generateToken(req.body)
 
     return res.status(201).send({ message: 'Deu tudo Certo!!!', token })
