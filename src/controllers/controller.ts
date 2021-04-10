@@ -36,16 +36,17 @@ async function login(req: Request, res: Response) {
 }
 
 async function send(req: Request) {
-  await sendgrid.setApiKey(process.env.SENDGRID_API_KEY as string & { asBytes: true })
+  sendgrid.setApiKey(process.env.SENDGRID_API_KEY as string & { asBytes: true })
+
   const msg = {
     to: req.body.email,
     from: 'augustoprog40@gmail.com',
     subject: 'Email institucional!',
     text: 'Cadastro Node.js',
     html:
-      `${'<strong>Olá '}${req.body.name}, ` + ` Obrigado por se cadastrar no nosso site!</strong>`,
+      `${'<strong>Olá '}${req.body.email}, ` + ` Obrigado por se cadastrar no nosso site!</strong>`,
   }
-  sendgrid.send(msg)
+  await sendgrid.send(msg)
   return sendgrid
 }
 
@@ -57,7 +58,7 @@ async function create(req: Request, res: Response) {
       password: md5(req.body.password, process.env.SECRET as string & { asBytes: true }),
     })
 
-    send(req.body)
+    send(req.body.email)
     const token = await generateToken(req.body)
 
     return res.status(201).send({ message: 'Deu tudo Certo!!!', token })
